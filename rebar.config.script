@@ -195,10 +195,17 @@ AppendList2 = fun(Append) ->
 		      end
 	      end,
 
+HexConversion =
+fun({base64url, "v1.0"}) ->
+        {base64url, "0.0.1"};
+   (Dep) ->
+        Dep
+end,
+
 Rebar3DepsFilter =
 fun(DepsList) ->
 	lists:map(fun({DepName, _, {git, _, {tag, Version}}}) ->
-			  {DepName, Version};
+			  HexConversion({DepName, Version});
 		     (Dep) ->
 			  Dep
 		  end, DepsList)
@@ -284,8 +291,7 @@ CtParams = fun(CompileOpts) ->
 
 GenDepConfigureLine =
 fun(DepPath, Flags) ->
-	["sh -c 'if test ! -f config.status -o ",
-	 "../../config.status -nt config.status; ",
+	["sh -c 'if test -f configure; ",
 	 "then (",
 	 "CFLAGS=\"", CFlags,"\" ",
 	 "CPPFLAGS=\"", CPPFlags, "\" "
