@@ -17,11 +17,16 @@
 %%% 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 %%%
 %%%----------------------------------------------------------------------
-Vars = case file:consult(filename:join([filename:dirname(SCRIPT),"vars.config"])) of
+Vars = case file:consult("vars.config") of
 	   {ok, Terms} ->
 	       Terms;
 	   _Err ->
-	       []
+                case file:consult(filename:join([filename:dirname(SCRIPT),"vars.config"])) of
+                    {ok, Terms2} ->
+                        Terms2;
+                    _Err2 ->
+                        []
+                end
        end ++ [{cflags, "-g -O2 -Wall"}, {cppflags, "-g -O2 -Wall"},
 	       {ldflags, ""}, {system_deps, false}],
 {cflags, CFlags} = lists:keyfind(cflags, 1, Vars),
