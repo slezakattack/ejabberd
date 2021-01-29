@@ -289,8 +289,7 @@ CtParams = fun(CompileOpts) ->
 
 GenDepConfigureLine =
 fun(DepPath, Flags) ->
-	["sh -c 'if test ! -f config.status -o ",
-	 "../../config.status -nt config.status; ",
+	["sh -c 'if test -f configure; ",
 	 "then (",
 	 "CFLAGS=\"", CFlags,"\" ",
 	 "CPPFLAGS=\"", CPPFlags, "\" "
